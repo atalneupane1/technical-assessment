@@ -109,24 +109,25 @@ function nodeClicked(point){
                     }
                 }
             }
-            
-            res = {
-                "msg": "VALID_END_NODE",
-                "body": {
-                    "newLine": {
-                        "start": {
-                            "x": selectedNode.x,
-                            "y": selectedNode.y
+            else { 
+                    res = {
+                    "msg": "VALID_END_NODE",
+                    "body": {
+                        "newLine": {
+                            "start": {
+                                "x": selectedNode.x,
+                                "y": selectedNode.y
+                            },
+                            "end": {
+                                "x": point.x,
+                                "y": point.y
+                            }
                         },
-                        "end": {
-                            "x": point.x,
-                            "y": point.y
-                        }
-                    },
-                    "heading": "Player" + player,
-                    "message": null
-                }
-            };
+                        "heading": "Player" + player,
+                        "message": null
+                    }
+                };
+            }
             app.ports.response.send(res);
 
             selectedNode =  null;
@@ -184,6 +185,8 @@ function validNode(point){
         // check if lines are intersecting
         if(isDiagonal){
             isValid = isValidMove(selectedNode.x, selectedNode.y, point.x, point.y);
+        } else {
+            drawnLines.push({ start: { x: selectedNode.x, y: selectedNode.y }, end: { x: point.x, y: point.y } });
         }
 
         // Check if the line is horizontal, vertical, or diagonal
