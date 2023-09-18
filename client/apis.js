@@ -43,7 +43,7 @@ function initialize(msgBody){
         "msg": "INITIALIZE",
         "body": {
             "newLine": null,
-            "heading": "Player" + player,
+            "heading": "Player " + player,
             "message": "Awaiting Player 1's Move"
         }
     });
@@ -59,7 +59,7 @@ function nodeClicked(point){
             "msg": "VALID_START_NODE",
             "body": {
                 "newLine": null,
-                "heading": "Player" + player,
+                "heading": "Player " + player,
                 "message": "Select a second node to complete the line."
             }
         }
@@ -123,7 +123,7 @@ function nodeClicked(point){
                                 "y": point.y
                             }
                         },
-                        "heading": "Player" + player,
+                        "heading": "Player " + player,
                         "message": null
                     }
                 };
@@ -138,7 +138,7 @@ function nodeClicked(point){
                 "msg": "VALID_START_NODE",
                 "body": {
                     "newLine": null,
-                    "heading": "Player" + player,
+                    "heading": "Player " + player,
                     "message": "Select a second node to complete the line."
                 }
             }
@@ -150,7 +150,7 @@ function nodeClicked(point){
             "msg": "INVALID_END_NODE",
             "body": {
                 "newLine": null,
-                "heading": "Player" + player,
+                "heading": "Player " + player,
                 "message": "Invalid move!"
             }
         };
@@ -172,7 +172,7 @@ function validNode(point){
         if(visitedNode.includes(JSON.stringify(point))){
             return false;
         }
-        // Logic to check if line can be drawn
+        // Logic to check if line is diagonal 
         const pointXDiff = Math.abs(selectedNode.x - point.x);
         const pointYDiff = Math.abs(selectedNode.y - point.y);
         
@@ -221,10 +221,19 @@ function isValidMove(x1, y1, x2, y2) {
     const newLine = { start: { x: x1, y: y1 }, end: { x: x2, y: y2 } };
 
     // Check for intersections with all previously drawn lines except the immediate previous line
-    for (let i = 0; i < drawnLines.length - 1; i++) {
-      if (doLineSegmentsIntersect(newLine, drawnLines[i])) {
-        return false; // Intersection found, invalid move
-      }
+    for (let i = 0; i < drawnLines.length; i++) {
+        const pointXDiff = Math.abs(drawnLines[i].start.x - drawnLines[i].end.x);
+        const pointYDiff = Math.abs(drawnLines[i].start.y - drawnLines[i].end.y);
+        
+        isDiagonal = false;
+        
+        if(pointXDiff === 1 && pointYDiff===1){
+            isDiagonal = true;
+        }
+
+        if (isDiagonal && doLineSegmentsIntersect(newLine, drawnLines[i])) {
+            return false; // Intersection found, invalid move
+        }
     }
   
     // If no intersections were found, add the new line to the list of drawn lines
