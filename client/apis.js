@@ -221,7 +221,7 @@ function isValidMove(x1, y1, x2, y2) {
     const newLine = { start: { x: x1, y: y1 }, end: { x: x2, y: y2 } };
 
     // Check for intersections with all previously drawn lines except the immediate previous line
-    for (let i = 0; i < drawnLines.length; i++) {
+    for (let i = 0; i < drawnLines.length-1; i++) {
         const pointXDiff = Math.abs(drawnLines[i].start.x - drawnLines[i].end.x);
         const pointYDiff = Math.abs(drawnLines[i].start.y - drawnLines[i].end.y);
         
