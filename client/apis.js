@@ -8,6 +8,7 @@
  let startPoint = null;
  let endPoint = null;
  let player = 1;
+ let gameOver = false;
  const drawnLines = []; // Maintain a list of drawn lines, each represented as an object { start: { x, y }, end: { x, y } }
 
 //  let gameStarted = null;
@@ -53,6 +54,14 @@ function initialize(msgBody){
 }
 
 function nodeClicked(point){
+    if(gameOver){
+        res = {
+            "msg": "GAME_OVER",
+            "heading": "Game Over",
+            "message": "Player "+ player +" Wins!"
+            };
+        app.ports.response.send(res);
+    }
     if(!startPoint && !selectedNode){
         selectedNode = point;
         const res = {
@@ -77,8 +86,6 @@ function nodeClicked(point){
                 player = 1;
             }
 
-            
-
             if(!startPoint){
                 startPoint = selectedNode;
                 endPoint = point;
@@ -91,6 +98,7 @@ function nodeClicked(point){
             visitedNode.push(JSON.stringify(point));
 
             if(!checkIfGameOver()){
+                gameOver = true;
                 res = {
                     "msg": "GAME_OVER",
                     "body": {
