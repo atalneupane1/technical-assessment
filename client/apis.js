@@ -225,7 +225,7 @@ function doLineSegmentsIntersect(line1, line2) {
 }
 
 // Function to draw a line between nodes and check for intersections
-function isValidMove(x1, y1, x2, y2) {
+function isValidMove(x1, y1, x2, y2, doSave=true) {
     const newLine = { start: { x: x1, y: y1 }, end: { x: x2, y: y2 } };
 
     // Check for intersections with all previously drawn lines except the immediate previous line
@@ -245,7 +245,7 @@ function isValidMove(x1, y1, x2, y2) {
     }
   
     // If no intersections were found, add the new line to the list of drawn lines
-    drawnLines.push(newLine);
+    if(doSave) drawnLines.push(newLine);
     return true; // Valid move
 }
 
@@ -272,7 +272,10 @@ function checkIfGameOver() {
         // Check if the next point is within the grid bounds
         if (nextX >= 0 && nextX < gridSize && nextY >= 0 && nextY < gridSize) {
             if(!visitedNode.includes(JSON.stringify({ x: nextX, y: nextY }))){
-                possibleNextPointAvailable = true;
+                // check if startpoint has diagonal available
+                if(isValidMove(nextX, nextY, startPoint.x, startPoint.y, false)){
+                    possibleNextPointAvailable = true;
+                }
             } 
         }
     }
@@ -284,7 +287,10 @@ function checkIfGameOver() {
         // Check if the next point is within the grid bounds
         if (nextX >= 0 && nextX < gridSize && nextY >= 0 && nextY < gridSize) {
             if(!visitedNode.includes(JSON.stringify({ x: nextX, y: nextY }))){
-                possibleNextPointAvailable = true;
+                // check if startpoint has diagonal available
+                if(isValidMove(nextX, nextY, endPoint.x, endPoint.y, false)){
+                    possibleNextPointAvailable = true;
+                }
             } 
         }
     }
